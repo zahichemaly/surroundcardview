@@ -88,7 +88,7 @@ class SurroundCardView @JvmOverloads constructor(
         context.withStyledAttributes(attrs, R.styleable.SurroundCardView) {
             surroundColor = getColor(
                 R.styleable.SurroundCardView_scv_color,
-                context.getColor(R.color.scv_surround_color_default)
+                ContextCompat.getColor(context, R.color.scv_surround_color_default)
             )
 
             duration = getInteger(
@@ -187,7 +187,7 @@ class SurroundCardView @JvmOverloads constructor(
     private fun prepare() {
         canvasTransformer = CanvasTransformerFactory.create(internalWidth, internalHeight, startPoint)
         pathPaint.pathEffect = null
-        createFirstPath()
+        createPathFromMiddleClockWise()
         setupAnimators()
     }
 
@@ -230,7 +230,7 @@ class SurroundCardView @JvmOverloads constructor(
     }
 
     fun setSurroundStrokeColor(@ColorRes color: Int) {
-        val colorId = context.getColor(color)
+        val colorId = ContextCompat.getColor(context, color)
         setSurroundStrokeColorInternal(colorId)
     }
 
@@ -248,7 +248,7 @@ class SurroundCardView @JvmOverloads constructor(
         linePadding = (widthInPx / 2).toFloat()
     }
 
-    private fun createFirstPath() {
+    private fun createPathAntiClockWise() {
         firstPath.reset()
         firstPath.moveTo(linePadding, radiusCorner)
         firstPath.quadTo(linePadding, linePadding, radiusCorner, linePadding)
@@ -277,6 +277,95 @@ class SurroundCardView @JvmOverloads constructor(
             internalHeight - radiusCorner
         )
         firstPath.lineTo(linePadding, radiusCorner)
+    }
+
+    private fun createPathFromMiddleAntiClockWise() {
+        firstPath.reset()
+        firstPath.moveTo((internalWidth / 2), linePadding)
+        firstPath.lineTo(internalWidth - radiusCorner, linePadding)
+        firstPath.quadTo(
+            internalWidth - linePadding,
+            linePadding,
+            internalWidth - linePadding,
+            radiusCorner
+        )
+        firstPath.lineTo(
+            internalWidth - linePadding,
+            internalHeight - radiusCorner
+        )
+        firstPath.quadTo(
+            internalWidth - linePadding,
+            internalHeight - linePadding,
+            internalWidth - radiusCorner,
+            internalHeight - linePadding
+        )
+        firstPath.lineTo(radiusCorner, internalHeight - linePadding)
+        firstPath.quadTo(
+            linePadding,
+            internalHeight - linePadding,
+            linePadding,
+            internalHeight - radiusCorner
+        )
+        firstPath.lineTo(linePadding, radiusCorner)
+        firstPath.quadTo(linePadding, linePadding, radiusCorner, linePadding)
+        firstPath.lineTo((internalWidth / 2), linePadding)
+    }
+
+    private fun createPathClockWise() {
+        firstPath.reset()
+        firstPath.moveTo(radiusCorner, linePadding)
+        firstPath.quadTo(linePadding, linePadding, linePadding, radiusCorner)
+        firstPath.lineTo(linePadding, internalHeight - radiusCorner)
+        firstPath.quadTo(
+            linePadding,
+            internalHeight - linePadding,
+            radiusCorner,
+            internalHeight - linePadding
+        )
+        firstPath.lineTo(internalWidth - radiusCorner, internalHeight - linePadding)
+        firstPath.quadTo(
+            internalWidth - linePadding,
+            internalHeight - linePadding,
+            internalWidth - linePadding,
+            internalHeight - radiusCorner
+        )
+        firstPath.lineTo(internalWidth - linePadding, radiusCorner)
+        firstPath.quadTo(
+            internalWidth - linePadding,
+            linePadding,
+            internalWidth - radiusCorner,
+            linePadding
+        )
+        firstPath.lineTo(radiusCorner, linePadding)
+    }
+
+    private fun createPathFromMiddleClockWise() {
+        firstPath.reset()
+        firstPath.moveTo(linePadding, (internalHeight / 2))
+        firstPath.lineTo(linePadding, internalHeight - radiusCorner)
+        firstPath.quadTo(
+            linePadding,
+            internalHeight - linePadding,
+            radiusCorner,
+            internalHeight - linePadding
+        )
+        firstPath.lineTo(internalWidth - radiusCorner, internalHeight - linePadding)
+        firstPath.quadTo(
+            internalWidth - linePadding,
+            internalHeight - linePadding,
+            internalWidth - linePadding,
+            internalHeight - radiusCorner
+        )
+        firstPath.lineTo(internalWidth - linePadding, radiusCorner)
+        firstPath.quadTo(
+            internalWidth - linePadding,
+            linePadding,
+            internalWidth - radiusCorner,
+            linePadding
+        )
+        firstPath.lineTo(radiusCorner, linePadding)
+        firstPath.quadTo(linePadding, linePadding, linePadding, radiusCorner)
+        firstPath.lineTo(linePadding, (internalHeight / 2))
     }
 
     override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {

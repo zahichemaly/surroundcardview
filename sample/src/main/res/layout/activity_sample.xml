@@ -41,7 +41,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/sampleTitleTextView"
                 app:scv_color="#03A9F4"
                 app:scv_duration="1500"
-                app:scv_startPoint="bottom_start"
+                app:scv_startPoint="top_end"
                 app:scv_surrounded="true"
                 app:scv_width="12dp" />
 
