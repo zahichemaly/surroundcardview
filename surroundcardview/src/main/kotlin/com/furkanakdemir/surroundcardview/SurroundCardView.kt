@@ -17,12 +17,8 @@ package com.furkanakdemir.surroundcardview
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.DashPathEffect
-import android.graphics.Paint
+import android.graphics.*
 import android.graphics.Paint.ANTI_ALIAS_FLAG
-import android.graphics.Path
-import android.graphics.PathMeasure
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.SparseArray
@@ -57,7 +53,6 @@ class SurroundCardView @JvmOverloads constructor(
     private var pathPaint: Paint = Paint(ANTI_ALIAS_FLAG)
 
     private var firstPath = Path()
-    private var secondPath = Path()
 
     private var radiusCorner: Float
 
@@ -133,7 +128,6 @@ class SurroundCardView @JvmOverloads constructor(
         canvasTransformer.transform(canvas)
 
         canvas.drawPath(firstPath, pathPaint)
-        canvas.drawPath(secondPath, pathPaint)
         canvas.restore()
     }
 
@@ -166,7 +160,6 @@ class SurroundCardView @JvmOverloads constructor(
         if (forced) {
             if (!isSurrounded) {
                 firstPath.reset()
-                secondPath.reset()
             } else {
                 prepare()
             }
@@ -192,13 +185,9 @@ class SurroundCardView @JvmOverloads constructor(
     }
 
     private fun prepare() {
-        canvasTransformer =
-            CanvasTransformerFactory.create(internalWidth, internalHeight, startPoint)
-
+        canvasTransformer = CanvasTransformerFactory.create(internalWidth, internalHeight, startPoint)
         pathPaint.pathEffect = null
-
         createFirstPath()
-        createSecondPath()
         setupAnimators()
     }
 
@@ -259,25 +248,6 @@ class SurroundCardView @JvmOverloads constructor(
         linePadding = (widthInPx / 2).toFloat()
     }
 
-    private fun createSecondPath() {
-        secondPath.reset()
-        secondPath.moveTo(linePadding, radiusCorner)
-        secondPath.lineTo(linePadding, internalHeight - radiusCorner)
-        secondPath.quadTo(
-            linePadding,
-            internalHeight - linePadding,
-            radiusCorner,
-            internalHeight - linePadding
-        )
-        secondPath.lineTo(internalWidth - radiusCorner, internalHeight - linePadding)
-        secondPath.quadTo(
-            internalWidth - linePadding,
-            internalHeight - linePadding,
-            internalWidth - linePadding,
-            internalHeight - radiusCorner
-        )
-    }
-
     private fun createFirstPath() {
         firstPath.reset()
         firstPath.moveTo(linePadding, radiusCorner)
@@ -293,6 +263,20 @@ class SurroundCardView @JvmOverloads constructor(
             internalWidth - linePadding,
             internalHeight - radiusCorner
         )
+        firstPath.quadTo(
+            internalWidth - linePadding,
+            internalHeight - linePadding,
+            internalWidth - radiusCorner,
+            internalHeight - linePadding
+        )
+        firstPath.lineTo(radiusCorner, internalHeight - linePadding)
+        firstPath.quadTo(
+            linePadding,
+            internalHeight - linePadding,
+            linePadding,
+            internalHeight - radiusCorner
+        )
+        firstPath.lineTo(linePadding, radiusCorner)
     }
 
     override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {

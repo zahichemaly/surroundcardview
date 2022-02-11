@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="vertical"
+            android:layout_height="match_parent"
             android:focusableInTouchMode="true"
-            android:layout_height="match_parent">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/sampleTitleTextView"
@@ -32,39 +32,39 @@
                 android:layout_height="@dimen/size_surround_card"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/spacing_large"
-                app:cardBackgroundColor="@color/customBackgroundColor"
                 android:background="@android:color/white"
                 android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/customBackgroundColor"
                 app:cardCornerRadius="@dimen/radius_card_stand_alone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sampleTitleTextView"
-                app:scv_duration="1000"
-                app:scv_startPoint="bottom_start"
                 app:scv_color="#03A9F4"
+                app:scv_duration="1500"
+                app:scv_startPoint="bottom_start"
                 app:scv_surrounded="true"
                 app:scv_width="12dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:gravity="center"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="center">
 
                 <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/action_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/spacing_small"
-                    app:icon="@drawable/ic_locked"
-                    android:text="@string/sample_release" />
+                    android:text="@string/sample_release"
+                    app:icon="@drawable/ic_locked" />
 
                 <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/switch_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/spacing_small"
-                    app:icon="@drawable/ic_switch"
-                    android:text="@string/sample_switch" />
+                    android:text="@string/sample_switch"
+                    app:icon="@drawable/ic_switch" />
 
             </LinearLayout>
 
@@ -78,9 +78,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/sampleRecyclerView"
                 android:layout_width="match_parent"
-                android:clipToPadding="false"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_large"
+                android:clipToPadding="false"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
