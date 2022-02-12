@@ -32,6 +32,8 @@ import androidx.core.content.withStyledAttributes
 import com.furkanakdemir.surroundcardview.StartPoint.TOP_START
 import com.furkanakdemir.surroundcardview.canvas.CanvasTransformer
 import com.furkanakdemir.surroundcardview.canvas.CanvasTransformerFactory
+import com.furkanakdemir.surroundcardview.path.PathDrawer
+import com.furkanakdemir.surroundcardview.path.PathDrawerFactory
 import com.google.android.material.card.MaterialCardView
 
 @Suppress("TooManyFunctions")
@@ -73,6 +75,10 @@ class SurroundCardView @JvmOverloads constructor(
 
     private var canvasTransformer: CanvasTransformer = CanvasTransformerFactory.default()
 
+    private var pathOrientation = PathOrientation.HORIZONTAL
+
+    private var pathDrawer: PathDrawer = PathDrawerFactory.default()
+
     init {
         clipToOutline = false
         pathPaint.style = Paint.Style.STROKE
@@ -108,6 +114,10 @@ class SurroundCardView @JvmOverloads constructor(
 
             startPoint = StartPoint.values()[
                 getInt(R.styleable.SurroundCardView_scv_startPoint, TOP_START.ordinal)
+            ]
+
+            pathOrientation = PathOrientation.values()[
+                getInt(R.styleable.SurroundCardView_scv_orientation, PathOrientation.HORIZONTAL.ordinal)
             ]
         }
     }
@@ -187,7 +197,8 @@ class SurroundCardView @JvmOverloads constructor(
     private fun prepare() {
         canvasTransformer = CanvasTransformerFactory.create(internalWidth, internalHeight, startPoint)
         pathPaint.pathEffect = null
-        createPathFromMiddleClockWise()
+        pathDrawer = PathDrawerFactory.create(pathOrientation)
+        pathDrawer.prepare(firstPath, radiusCorner, linePadding, internalWidth, internalHeight)
         setupAnimators()
     }
 
@@ -246,126 +257,6 @@ class SurroundCardView @JvmOverloads constructor(
     private fun setSurroundStrokeWidthInternal(widthInPx: Int) {
         pathPaint.strokeWidth = widthInPx.toFloat()
         linePadding = (widthInPx / 2).toFloat()
-    }
-
-    private fun createPathAntiClockWise() {
-        firstPath.reset()
-        firstPath.moveTo(linePadding, radiusCorner)
-        firstPath.quadTo(linePadding, linePadding, radiusCorner, linePadding)
-        firstPath.lineTo(internalWidth - radiusCorner, linePadding)
-        firstPath.quadTo(
-            internalWidth - linePadding,
-            linePadding,
-            internalWidth - linePadding,
-            radiusCorner
-        )
-        firstPath.lineTo(
-            internalWidth - linePadding,
-            internalHeight - radiusCorner
-        )
-        firstPath.quadTo(
-            internalWidth - linePadding,
-            internalHeight - linePadding,
-            internalWidth - radiusCorner,
-            internalHeight - linePadding
-        )
-        firstPath.lineTo(radiusCorner, internalHeight - linePadding)
-        firstPath.quadTo(
-            linePadding,
-            internalHeight - linePadding,
-            linePadding,
-            internalHeight - radiusCorner
-        )
-        firstPath.lineTo(linePadding, radiusCorner)
-    }
-
-    private fun createPathFromMiddleAntiClockWise() {
-        firstPath.reset()
-        firstPath.moveTo((internalWidth / 2), linePadding)
-        firstPath.lineTo(internalWidth - radiusCorner, linePadding)
-        firstPath.quadTo(
-            internalWidth - linePadding,
-            linePadding,
-            internalWidth - linePadding,
-            radiusCorner
-        )
-        firstPath.lineTo(
-            internalWidth - linePadding,
-            internalHeight - radiusCorner
-        )
-        firstPath.quadTo(
-            internalWidth - linePadding,
-            internalHeight - linePadding,
-            internalWidth - radiusCorner,
-            internalHeight - linePadding
-        )
-        firstPath.lineTo(radiusCorner, internalHeight - linePadding)
-        firstPath.quadTo(
-            linePadding,
-            internalHeight - linePadding,
-            linePadding,
-            internalHeight - radiusCorner
-        )
-        firstPath.lineTo(linePadding, radiusCorner)
-        firstPath.quadTo(linePadding, linePadding, radiusCorner, linePadding)
-        firstPath.lineTo((internalWidth / 2), linePadding)
-    }
-
-    private fun createPathClockWise() {
-        firstPath.reset()
-        firstPath.moveTo(radiusCorner, linePadding)
-        firstPath.quadTo(linePadding, linePadding, linePadding, radiusCorner)
-        firstPath.lineTo(linePadding, internalHeight - radiusCorner)
-        firstPath.quadTo(
-            linePadding,
-            internalHeight - linePadding,
-            radiusCorner,
-            internalHeight - linePadding
-        )
-        firstPath.lineTo(internalWidth - radiusCorner, internalHeight - linePadding)
-        firstPath.quadTo(
-            internalWidth - linePadding,
-            internalHeight - linePadding,
-            internalWidth - linePadding,
-            internalHeight - radiusCorner
-        )
-        firstPath.lineTo(internalWidth - linePadding, radiusCorner)
-        firstPath.quadTo(
-            internalWidth - linePadding,
-            linePadding,
-            internalWidth - radiusCorner,
-            linePadding
-        )
-        firstPath.lineTo(radiusCorner, linePadding)
-    }
-
-    private fun createPathFromMiddleClockWise() {
-        firstPath.reset()
-        firstPath.moveTo(linePadding, (internalHeight / 2))
-        firstPath.lineTo(linePadding, internalHeight - radiusCorner)
-        firstPath.quadTo(
-            linePadding,
-            internalHeight - linePadding,
-            radiusCorner,
-            internalHeight - linePadding
-        )
-        firstPath.lineTo(internalWidth - radiusCorner, internalHeight - linePadding)
-        firstPath.quadTo(
-            internalWidth - linePadding,
-            internalHeight - linePadding,
-            internalWidth - linePadding,
-            internalHeight - radiusCorner
-        )
-        firstPath.lineTo(internalWidth - linePadding, radiusCorner)
-        firstPath.quadTo(
-            internalWidth - linePadding,
-            linePadding,
-            internalWidth - radiusCorner,
-            linePadding
-        )
-        firstPath.lineTo(radiusCorner, linePadding)
-        firstPath.quadTo(linePadding, linePadding, linePadding, radiusCorner)
-        firstPath.lineTo(linePadding, (internalHeight / 2))
     }
 
     override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {

@@ -13,5 +13,12 @@
             <enum name="bottom_start" value="2" />
             <enum name="bottom_end" value="3" />
         </attr>
+
+        <attr name="scv_orientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="horizontal_middle" value="1" />
+            <enum name="vertical" value="2" />
+            <enum name="vertical_middle" value="3" />
+        </attr>
     </declare-styleable>
 </resources>
